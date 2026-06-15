@@ -633,6 +633,16 @@ fn json_to_toml(v: serde_json::Value) -> Option<toml::Value> {
 /// Must start AND end with alphanumeric. Adjacent underscores (`__`) are
 /// forbidden because they collide with the env-var grammar's path separator.
 ///
+/// Single-character predicate for alias keys.  Kept as the canonical
+/// source of truth alongside [`validate_alias_key`] so callers that
+/// filter keystrokes (TUI / quickstart) don't duplicate the allowed
+/// character set inline.
+///
+/// Allowed: `a-z`, `0-9`, `_`.
+pub fn is_valid_alias_char(c: char) -> bool {
+    matches!(c, 'a'..='z' | '0'..='9' | '_')
+}
+
 /// The env-var grammar uses `__` as path separator, which lets aliases keep
 /// single `_` literally (`prod_v2`, `staging_api`). Hyphens are forbidden
 /// because they are illegal in POSIX env-var identifiers; uppercase is
